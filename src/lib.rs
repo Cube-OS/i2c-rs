@@ -115,7 +115,7 @@ pub struct Command {
 
 /// Struct for communicating with an I2C device
 pub struct Connection {
-    stream: Box<Stream>,
+    stream: Box<Stream + Send>,
 }
 
 impl Connection {
@@ -123,9 +123,9 @@ impl Connection {
     ///
     /// # Arguments
     ///
-    /// `path` - Path to I2C device
-    /// `slave` - I2C slave address to read/write to
-    pub fn new(stream: Box<Stream>) -> Self {
+    /// `path` - Path to I2c device
+    /// `slave` - I2c slave address to read/write to
+    pub fn new(stream: Box<Stream + Send>) -> Self {
         Self { stream }
     }
 
