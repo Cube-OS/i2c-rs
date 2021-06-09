@@ -9,5 +9,5 @@ nos3 = ["nosengine-rust", "toml"]
 
 [dependencies]
 i2c-linux = "0.1"
-nosengine-rust = { path = "../../../apis/nosengine-rust", optional = true }
+nosengine-rust = { git = "https://github.com/Cube-OS/nosengine-rust.git", optional = true }
 toml = { version = "0.4.0", optional = true }
