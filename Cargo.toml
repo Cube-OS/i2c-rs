@@ -6,3 +6,4 @@ edition = "2018"
 
 [dependencies]
 i2c-linux = "0.1"
+hal-stream = { git = "ssh://git@github.com/Cube-OS/hal-stream"}
