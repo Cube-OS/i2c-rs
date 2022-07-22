@@ -41,6 +41,15 @@ pub trait Stream {
     /// `rx_len`  - Amount of data to read
     fn read(&self, command: Command, rx_len: usize) -> Result<Vec<u8>>;
 
+    /// Reads command result with Timeout
+    ///
+    /// # Arguments
+    ///
+    /// `command` - Command to read result from
+    /// `rx_len`  - Amount of data to read
+    /// `timeout` - Timeout for the read operation
+    fn read_timeout(&self, command: Command, rx_len: usize, timeout: Duration) -> Result<Vec<u8>>;
+
     /// Writes I2C command and reads result
     ///
     /// # Arguments
@@ -85,6 +94,16 @@ impl Stream for I2CStream {
     fn read(&self, command: Command, rx_len: usize) -> Result<Vec<u8>> {
         let mut i2c = I2c::from_path(self.path.clone())?;
         i2c.smbus_set_slave_address(self.slave, false)?;
+        let mut data = vec![0; rx_len];
+        i2c.i2c_read_block_data(command.cmd, &mut data)?;
+        Ok(data)
+    }
+
+    /// Reads command result with Timeout
+    fn read_timeout(&self, command: Command, rx_len: usize, timeout: Duration) -> Result<Vec<u8>> {
+        let mut i2c = I2c::from_path(self.path.clone())?;
+        i2c.smbus_set_slave_address(self.slave, false)?;
+        i2c.i2c_set_timeout(timeout)?;
         let mut data = vec![0; rx_len];
         i2c.i2c_read_block_data(command.cmd, &mut data)?;
         Ok(data)
@@ -158,7 +177,7 @@ impl Connection {
     /// `rx_len`  - Amount of data to read
     pub fn read(&self, command: Command, rx_len: usize) -> Result<Vec<u8>> {
         self.stream.read(command, rx_len)
-    }
+    }    
 
     /// Writes I2C command and reads result
     ///
