@@ -53,6 +53,8 @@ impl I2CStream {
 }
 
 impl Stream for I2CStream {
+    type StreamError = std::io::Error;
+
     /// Writing
     fn write(&self, command: Vec<u8>) -> Result<()> {
         let mut i2c = I2c::from_path(self.path.clone())?;
@@ -104,7 +106,7 @@ pub struct Command {
 
 /// Struct for communicating with an I2C device
 pub struct Connection {
-    stream: Box<dyn Stream + Send>,
+    stream: Box<dyn Stream<StreamError = std::io::Error> + Send>,
 }
 
 impl Connection {
@@ -114,7 +116,7 @@ impl Connection {
     ///
     /// `path` - Path to I2C device
     /// `slave` - I2C slave address to read/write to
-    pub fn new(stream: Box<dyn Stream + Send>) -> Self {
+    pub fn new(stream: Box<dyn Stream<StreamError = std::io::Error> + Send>) -> Self {
         Self { stream }
     }
 
