@@ -81,6 +81,12 @@ impl Stream for I2CStream {
         i2c.i2c_write_block_data(command.cmd, &command.data)
     }
 
+    fn write_bytes(&self, command: Command) -> Result<()> {
+        let mut i2c = I2c::from_path(self.path.clone())?;
+        i2c.smbus_set_slave_address(self.slave, false)?;
+        i2c.i2c_write_block_data(command.cmd, &command.data)
+    }
+
     /// Reading
     fn read(&self, command: Command, rx_len: usize) -> Result<Vec<u8>> {
         let mut i2c = I2c::from_path(self.path.clone())?;
