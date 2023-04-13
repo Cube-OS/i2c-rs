@@ -1,5 +1,5 @@
 [package]
-name = "rust-i2c"
+name = "i2c-rs"
 version = "0.2.0"
 authors = ["Ryan Plauche <ryan@kubos.co>", "Patrick Oppel <patrick.oppel94@gmail.com>"]
 edition = "2018"
