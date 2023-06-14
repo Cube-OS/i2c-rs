@@ -94,9 +94,9 @@ impl Stream for I2CStream {
         i2c.smbus_set_slave_address(self.slave, false)?;
 
         i2c.i2c_set_retries(5)?;
-        i2c.i2c_write_block_data(command[0], &command[1..])?;
+        i2c.smbus_write_block_data(command[0], &command[1..])?;
         thread::sleep(delay);
-        i2c.i2c_read_block_data(command[0], &mut data)?;
+        i2c.smbus_read_block_data(command[0], &mut data)?;
         Ok(data)
     }
 }
