@@ -89,7 +89,31 @@ impl Stream for I2CStream {
 
     /// Read/Write transaction
     fn transfer(&self, command: Vec<u8>, rx_len: usize, delay: Duration) -> Result<Vec<u8>> {
-        self.read_timeout(command, rx_len, delay)
+        let mut i2c = I2c::from_path(self.path.clone())?;
+        i2c.smbus_set_slave_address(self.slave, false)?;
+        let mut data = vec![0; rx_len];
+        let mut msgs = [
+            Message::Write {
+                address: self.slave,
+                data: &command,
+                flags: if i2c.address_10bit() {
+                    WriteFlags::TENBIT_ADDR
+                } else {
+                    WriteFlags::default()
+                },
+            },
+            Message::Read {
+                address: self.slave,
+                data: &data,
+                flags: if i2c.address_10bit() {
+                    ReadFlags::TENBIT_ADDR
+                } else {
+                    ReadFlags::default()
+                },
+            }
+            return i2c.i2c_transfer(&mut msgs).map(|_| msgs[1].len());
+        ]            
+        // Ok(data)
     }
 }
 
