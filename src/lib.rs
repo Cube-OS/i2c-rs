@@ -24,7 +24,7 @@
 
 //! I2C device connection abstractions
 
-use i2c_linux::I2c;
+use i2c_linux::{I2c,Message,WriteFlags,ReadFlags};
 use std::io::Result;
 use std::thread;
 use std::time::Duration;
@@ -78,7 +78,7 @@ impl Stream for I2CStream {
     }
 
     /// Reads command result with Timeout
-    fn read_timeout(&self, command: Vec<u8>, rx_len: usize, timeout: Duration) -> Result<Vec<u8>> {
+    fn read_timeout(&self, command: &mut Vec<u8>, rx_len: usize, timeout: Duration) -> Result<Vec<u8>> {
         let mut i2c = I2c::from_path(self.path.clone())?;
         i2c.smbus_set_slave_address(self.slave, false)?;
         i2c.i2c_set_timeout(timeout)?;
@@ -96,23 +96,15 @@ impl Stream for I2CStream {
             Message::Write {
                 address: self.slave,
                 data: &command,
-                flags: if i2c.address_10bit() {
-                    WriteFlags::TENBIT_ADDR
-                } else {
-                    WriteFlags::default()
-                },
+                flags: WriteFlags::default()
             },
             Message::Read {
                 address: self.slave,
                 data: &data,
-                flags: if i2c.address_10bit() {
-                    ReadFlags::TENBIT_ADDR
-                } else {
-                    ReadFlags::default()
-                },
-            }
-            return i2c.i2c_transfer(&mut msgs).map(|_| msgs[1].len());
-        ]            
+                flags: ReadFlags::default()
+            },            
+        ];
+        return i2c.i2c_transfer(&mut msgs).map(|_| msgs[1].len());         
         // Ok(data)
     }
 }
