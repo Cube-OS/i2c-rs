@@ -89,15 +89,7 @@ impl Stream for I2CStream {
 
     /// Read/Write transaction
     fn transfer(&self, command: Vec<u8>, rx_len: usize, delay: Duration) -> Result<Vec<u8>> {
-        let mut i2c = I2c::from_path(self.path.clone())?;
-        let mut data = vec![0; rx_len];
-        i2c.smbus_set_slave_address(self.slave, false)?;
-
-        i2c.i2c_set_retries(5)?;
-        i2c.smbus_write_block_data(command[0], &command[1..])?;
-        thread::sleep(delay);
-        i2c.smbus_read_block_data(command[0], &mut data)?;
-        Ok(data)
+        self.read_timeout(command, rx_len, delay)
     }
 }
 
