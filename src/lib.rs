@@ -100,12 +100,14 @@ impl Stream for I2CStream {
             },
             Message::Read {
                 address: self.slave,
-                data: &data,
+                data: &mut data,
                 flags: ReadFlags::default()
             },            
         ];
-        return i2c.i2c_transfer(&mut msgs).map(|_| msgs[1].len());         
-        // Ok(data)
+        match i2c.i2c_transfer(&mut msgs) {
+            Ok(_) => Ok(data),
+            Err(e) => Err(e),
+        }         
     }
 }
 
