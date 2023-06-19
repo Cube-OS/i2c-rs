@@ -91,6 +91,7 @@ impl Stream for I2CStream {
     fn transfer(&self, command: Vec<u8>, rx_len: usize, delay: Duration) -> Result<Vec<u8>> {
         let mut i2c = I2c::from_path(self.path.clone())?;
         i2c.smbus_set_slave_address(self.slave, false)?;
+        i2c.i2c_set_timeout(timeout)?;
         let mut data = vec![0; rx_len];
         let mut msgs = [
             Message::Write {
