@@ -100,20 +100,24 @@ impl Stream for I2CStream {
     fn transfer(&self, command: Vec<u8>, rx_len: usize, delay: Duration) -> Result<Vec<u8>> {
         let mut i2c = I2c::from_path(self.path.clone())?;
         i2c.smbus_set_slave_address(self.slave, false)?;
-        i2c.i2c_write_block_data(command[0], &command[1..])?;
-        thread::sleep(delay);
-        let mut data = vec![0; rx_len];
-        let mut msgs = [
-            Message::Read {
-                address: self.slave,
-                data: &mut data,
-                flags: ReadFlags::default()
-            },            
-        ];
-        match i2c.i2c_transfer(&mut msgs) {
-            Ok(_) => Ok(data),
+        match i2c.i2c_write_block_data(command[0], &command[1..]) {
+            Ok(()) => {
+                thread::sleep(delay);
+                let mut data = vec![0; rx_len];
+                let mut msgs = [
+                    Message::Read {
+                        address: self.slave,
+                        data: &mut data,
+                        flags: ReadFlags::default()
+                    },            
+                ];
+                match i2c.i2c_transfer(&mut msgs) {
+                    Ok(_) => Ok(data),
+                    Err(e) => Err(e),
+                } 
+            },
             Err(e) => Err(e),
-        } 
+        }        
     }
 }
 
