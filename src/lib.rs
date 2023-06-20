@@ -73,8 +73,17 @@ impl Stream for I2CStream {
         let mut i2c = I2c::from_path(self.path.clone())?;
         i2c.smbus_set_slave_address(self.slave, false)?;
         let mut data = vec![0; rx_len];
-        i2c.i2c_read_block_data(command[0], &mut data)?;
-        Ok(data)
+        let mut msgs = [
+            Message::Read {
+                address: self.slave,
+                data: &mut data,
+                flags: ReadFlags::default()
+            },            
+        ];
+        match i2c.i2c_transfer(&mut msgs) {
+            Ok(_) => Ok(data),
+            Err(e) => Err(e),
+        }  
     }
 
     /// Reads command result with Timeout
