@@ -191,6 +191,6 @@ impl Connection {
     pub fn transfer(&self, command: Command, rx_len: usize, delay: Duration) -> Result<Vec<u8>> {
         let mut buf = command.data;
         buf.insert(0,command.cmd);
-        self.stream.transfer(buf, rx_len, delay)
+        self.stream.transfer(buf, rx_len, Some(delay))
     }
 }
