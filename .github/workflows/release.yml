@@ -19,18 +19,21 @@ jobs:
         toolchain: stable
         override: true   
 
-    - name: Clone private repository
-      env:
-        GIT_TERMINAL_PROMPT: 0
-      run: |
-        git clone https://${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}@github.com/Cube-OS/crates.git
-    
-    - name: Clone Ktra
-      run: git clone https://github.com/patrickoppel/ktra.git
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: Cube-OS/crates
+
+    - name: Checkout Ktra
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: patrickoppel/ktra
+        path: ktra
 
     - name: Build Ktra
       run: |
-        cd ktra
         echo "
         [index_config]
         remote_url = 'https://github.com/Cube-OS/crates.git'
@@ -38,7 +41,8 @@ jobs:
         https_username = 'x-access-token'
         https_password = '${{ secrets.GITHUB_TOKEN }}'
         branch = 'main'
-        " > ./ktra.toml
+        " > ./ktra/ktra.toml
+        cd ktra
         cargo run
         cd ..
 
