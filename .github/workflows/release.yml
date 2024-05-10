@@ -20,8 +20,8 @@ jobs:
         override: true   
 
     - name: Clone private repository
-      # env:
-      #   GIT_TERMINAL_PROMPT: 0
+      env:
+        GIT_TERMINAL_PROMPT: 0
       run: |
         git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/Cube-OS/crates.git
     
