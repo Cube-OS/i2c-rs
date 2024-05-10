@@ -19,6 +19,27 @@ jobs:
         toolchain: stable
         override: true   
     
+    - name: Clone Ktra
+      run: git clone https://github.com/patrickoppel/ktra.git
+
+    - name: Build Ktra
+      run: |
+        cd ktra
+        echo "
+        [index_config]
+        remote_url = 'https://github.com/Cube-OS/crates.git'
+        https_username = '${{ secrets.GITHUB_USERNAME }}'
+        https_password = '${{ secrets.GITHUB_TOKEN }}'
+        branch = 'main'
+        " > ./ktra.toml
+        cargo run
+
+    - name: Create user for Ktra and login
+      run: |
+        TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d '{"password":"PASSWORD"}' http://localhost:8000/ktra/api/v1/new_user/ALICE)
+        cargo login --registry=ktra $TOKEN
+        cd ..
+
     - name: Build and test
       run: |
         cargo build --release
