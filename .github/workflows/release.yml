@@ -18,6 +18,12 @@ jobs:
       with:
         toolchain: stable
         override: true   
+
+    - name: Clone private repository
+      env:
+        GIT_TERMINAL_PROMPT: 0
+      run: |
+        git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/Cube-OS/crates.git
     
     - name: Clone Ktra
       run: git clone https://github.com/patrickoppel/ktra.git
@@ -28,6 +34,7 @@ jobs:
         echo "
         [index_config]
         remote_url = 'https://github.com/Cube-OS/crates.git'
+        local_path = '../crates'
         https_username = 'x-access-token'
         https_password = '${{ secrets.GITHUB_TOKEN }}'
         branch = 'main'
