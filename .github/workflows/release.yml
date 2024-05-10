@@ -23,7 +23,7 @@ jobs:
       env:
         GIT_TERMINAL_PROMPT: 0
       run: |
-        git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/Cube-OS/crates.git
+        git clone https://${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}@github.com/Cube-OS/crates.git
     
     - name: Clone Ktra
       run: git clone https://github.com/patrickoppel/ktra.git
