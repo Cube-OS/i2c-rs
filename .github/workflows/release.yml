@@ -10,21 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
     - name: Setup Rust
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
         override: true   
 
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        repository: Cube-OS/crates
+    # Create empty directory crates
+    - name: Create crates directory
+      run: mkdir crates
 
+    # Checkout Ktra
     - name: Checkout Ktra
       uses: actions/checkout@v2
       with:
@@ -32,6 +28,7 @@ jobs:
         repository: patrickoppel/ktra
         path: ktra
 
+    # Run Ktra
     - name: Build Ktra
       run: |
         echo "
@@ -46,37 +43,47 @@ jobs:
         cargo run
         cd ..
 
+    # Create new user for Ktra
     - name: Create user for Ktra and login
       run: |
         TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d '{"password":"PASSWORD"}' http://localhost:8000/ktra/api/v1/new_user/ALICE)
         cargo login --registry=ktra $TOKEN
 
+    # Checkout this repository
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Build and test
     - name: Build and test
       run: |
         cargo build --release
         cargo test
 
+    # Package
     - name: package
       run: cargo package
 
+    # Get crate info
     - name: Get crate info
       id: crate_info
       run: |
         echo "::set-output name=VERSION::$(cargo read-manifest | jq -r .version)"
         echo "::set-output name=NAME::$(cargo read-manifest | jq -r .name)"
 
+    # Upload package
     - name: Upload package
       uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.crate_info.outputs.NAME }}-${{ steps.crate_info.outputs.VERSION }}
         path: target/package/*.crate
     
-    - name: Get version
-      id: get_version
-      run: |
-        VERSION=$(grep "^version" Cargo.toml | cut -d' ' -f3 | tr -d '"')
-        echo "::set-output name=VERSION::${VERSION}"
+    # - name: Get version
+    #   id: get_version
+    #   run: |
+    #     VERSION=$(grep "^version" Cargo.toml | cut -d' ' -f3 | tr -d '"')
+    #     echo "::set-output name=VERSION::${VERSION}"
 
+    # Check if tag exists
     - name: Check if tag exists
       id: check_tag
       run: |
@@ -90,6 +97,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    # Create and push tag
     - name: Create and push tag
       if: steps.check_tag.outputs.EXISTS == 'false'
       run: |
@@ -98,6 +106,7 @@ jobs:
         git tag $TAG_NAME
         git push origin ${{ env.TAG_NAME }}
 
+    # Create Release
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -110,6 +119,7 @@ jobs:
         draft: false
         prerelease: false
 
+    # Upload Package to Release
     - name: Upload Release Asset
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
