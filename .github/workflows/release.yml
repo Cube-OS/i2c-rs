@@ -63,7 +63,7 @@ jobs:
         port = 8000
         " > ./ktra/ktra.toml
         cd ktra
-        cargo build
+        cargo build --release
         ./target/debug/ktra > ktra_output.txt 2>&1 &
         cd ..    
         rm ./ktra/github_token.txt
