@@ -7,4 +7,4 @@ repository = "https://github.com/Cube-OS/i2c-rs"
 
 [dependencies]
 i2c-linux = "0.1"
-hal-stream = { version = "0.1.13", registry = "cube-os"}
+hal-stream = { version = "0.1.14", registry = "cube-os"}

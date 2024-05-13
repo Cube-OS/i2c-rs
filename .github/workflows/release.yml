@@ -59,7 +59,7 @@ jobs:
         " > ./ktra/ktra.toml
         cd ktra
         cargo build
-        ./target/debug/ktra &
+        ./target/debug/ktra > ktra_output.txt 2>&1 &
         cd ..    
 
     - name: Create user for ktra and login, then build and test
@@ -147,3 +147,7 @@ jobs:
         asset_path: target/package/${{ steps.crate_info.outputs.NAME }}-${{ steps.crate_info.outputs.VERSION }}.crate
         asset_name: ${{ steps.crate_info.outputs.NAME }}-${{ steps.crate_info.outputs.VERSION }}.crate
         asset_content_type: application/octet-stream
+
+    - name: Print ktra output
+      run: |
+        cat ktra/ktra_output.txt
