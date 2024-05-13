@@ -25,8 +25,8 @@ jobs:
       run: |
         REGISTRY=$(awk -F'=' '/\[registries\]/ {getline; print $1}' .cargo/config.toml | tr -d ' ')
         REPO=$(grep -oP 'index = \K.*' .cargo/config.toml | tr -d '"' | awk -F/ '{print $(NF-1)"/"$NF}' | sed 's/\.git.*//')
-        # echo $REGISTRY
-        # echo $REPO
+        echo $REGISTRY
+        echo $REPO
 
     # Checkout Registry
     - name: Checkout Registry
