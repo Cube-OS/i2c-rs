@@ -55,6 +55,7 @@ jobs:
         https_username = 'x-access-token'
         https_password = '${{ secrets.GITHUB_TOKEN }}'
         branch = 'main'
+        token_path = '${{ secrets.GITHUB_TOKEN }}'
         " > ./ktra/ktra.toml
         cd ktra
         cargo build
