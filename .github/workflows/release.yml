@@ -37,13 +37,18 @@ jobs:
         repository: ${{ env.REPO }}
         path: crates       
 
-    # Checkout Ktra
-    - name: Checkout Ktra
-      uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        repository: patrickoppel/ktra
-        path: ktra
+    # # Checkout Ktra
+    # - name: Checkout Ktra
+    #   uses: actions/checkout@v2
+    #   with:
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+    #     repository: patrickoppel/ktra
+    #     path: ktra
+
+    # Clone Ktra
+    - name: Clone Ktra
+      run: |
+        git clone https://github.com/patrickoppel/ktra.git
 
     # Run Ktra
     - name: Build Ktra
