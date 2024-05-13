@@ -64,9 +64,11 @@ jobs:
         " > ./ktra/ktra.toml
         cd ktra
         cargo build --release
+        
+    - name: Run ktra
+      run: |
         ./target/debug/ktra > ktra_output.txt 2>&1 &
-        cd ..    
-        rm ./ktra/github_token.txt
+        cd ..
 
     - name: Create user for ktra and login, then build and test
       run: |
