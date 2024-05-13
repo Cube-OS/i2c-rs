@@ -37,22 +37,18 @@ jobs:
         repository: ${{ env.REPO }}
         path: crates       
 
-    # # Checkout Ktra
-    # - name: Checkout Ktra
-    #   uses: actions/checkout@v2
-    #   with:
-    #     token: ${{ secrets.GITHUB_TOKEN }}
-    #     repository: patrickoppel/ktra
-    #     path: ktra
-
-    # Clone Ktra
-    - name: Clone Ktra
-      run: |
-        git clone https://github.com/patrickoppel/ktra.git
+    # Checkout Ktra
+    - name: Checkout Ktra
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: patrickoppel/ktra
+        path: ktra
 
     # Run Ktra
     - name: Build Ktra
       run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" > ./ktra/github_token.txt
         echo "
         [index_config]
         remote_url = 'https://github.com/Cube-OS/crates.git'
@@ -60,12 +56,13 @@ jobs:
         https_username = 'x-access-token'
         https_password = '${{ secrets.GITHUB_TOKEN }}'
         branch = 'main'
-        token_path = '${{ secrets.GITHUB_TOKEN }}'
+        token_path = './github_token.txt'
         " > ./ktra/ktra.toml
         cd ktra
         cargo build
         ./target/debug/ktra > ktra_output.txt 2>&1 &
         cd ..    
+        rm ./ktra/github_token.txt
 
     - name: Create user for ktra and login, then build and test
       run: |
