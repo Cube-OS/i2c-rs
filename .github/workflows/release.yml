@@ -14,7 +14,6 @@ jobs:
       uses: dtolnay/rust-toolchain@v1
       with:
         toolchain: stable
-        override: true   
 
     # Checkout Code
     - name: Checkout code
@@ -60,12 +59,11 @@ jobs:
         " > ./ktra/ktra.toml
         cd ktra
         cargo build
-       
-
-    - name: Create user for ktra and login, then build and test
-      run: |
         ./target/debug/ktra
         cd ..
+
+    - name: Create user for ktra and login, then build and test
+      run: |        
         sleep 5
         TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d '{"password":"PASSWORD"}' http://localhost:8000/ktra/api/v1/new_user/ALICE)
         echo ${{ env.REGISTRY }}
