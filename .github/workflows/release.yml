@@ -57,10 +57,6 @@ jobs:
         https_password = "${{ secrets.GITHUB_TOKEN }}"
         branch = "main"
         token_path = "./github_token.txt"
-
-        [server_config]
-        address = [127, 0, 0, 1]
-        port = 8000
         " > ./ktra/ktra.toml
         cd ktra
         cargo build
@@ -72,8 +68,8 @@ jobs:
 
     - name: Create user for ktra and login, then build and test
       run: |
-        sleep 15
-        TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d '{"password":"PASSWORD"}' http://127.0.0.1:8000/ktra/api/v1/new_user/ALICE)
+        sleep 5
+        TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d '{"password":"PASSWORD"}' http://localhost:8000/ktra/api/v1/new_user/ALICE)
         echo ${{ env.REGISTRY }}
         cargo login --registry=${{ env.REGISTRY }} $TOKEN
 
