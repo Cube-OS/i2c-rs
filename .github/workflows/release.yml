@@ -21,7 +21,7 @@ jobs:
       run: |
         mkdir crates
         cd crates
-        git "Initial
+        git init
         touch README.md
         git add README.md
         git commit -m "Initial commit"
