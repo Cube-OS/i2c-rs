@@ -44,7 +44,7 @@ jobs:
         branch = 'main'
         " > ./ktra/ktra.toml
         cd ktra
-        cargo run
+        cargo run &
         cd ..
 
     # Create new user for Ktra
