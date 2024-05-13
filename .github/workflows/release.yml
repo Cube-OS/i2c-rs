@@ -51,12 +51,12 @@ jobs:
         echo "${{ secrets.GITHUB_TOKEN }}" > ./ktra/github_token.txt
         echo "
         [index_config]
-        remote_url = 'https://github.com/Cube-OS/crates.git'
-        local_path = '../crates'
-        https_username = 'x-access-token'
-        https_password = '${{ secrets.GITHUB_TOKEN }}'
-        branch = 'main'
-        token_path = './github_token.txt'
+        remote_url = "https://github.com/Cube-OS/crates.git"
+        local_path = "../crates"
+        https_username = "x-access-token"
+        https_password = "${{ secrets.GITHUB_TOKEN }}"
+        branch = "main"
+        token_path = "./github_token.txt"
 
         [server_config]
         address = [127, 0, 0, 1]
