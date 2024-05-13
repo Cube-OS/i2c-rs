@@ -16,19 +16,13 @@ jobs:
         toolchain: stable
         override: true   
 
-    # Create empty directory crates
-    - name: Create crates directory
-      run: |
-        mkdir crates
-        cd crates
-        git init
-        git config user.email "you@example.com"
-        git config user.name "Your Name"
-        git remote add origin "https://github.com/Cube-OS/crates.git"
-        touch README.md
-        git add README.md
-        git commit -m "Initial commit"
-        cd ..        
+    # Checkout Registry
+    - name: Checkout Registry
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: Cube-OS/crates
+        path: crates       
 
     # Checkout Ktra
     - name: Checkout Ktra
