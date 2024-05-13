@@ -48,15 +48,15 @@ jobs:
     - name: Build Ktra
       run: |
         echo "${{ secrets.GITHUB_TOKEN }}" > ./ktra/github_token.txt
-        echo "
+        echo '
         [index_config]
         remote_url = "https://github.com/Cube-OS/crates.git"
         local_path = "../crates"
         https_username = "x-access-token"
-        https_password = "${{ secrets.GITHUB_TOKEN }}"
+        https_password = "'${{ secrets.GITHUB_TOKEN }}'"
         branch = "main"
         token_path = "./github_token.txt"
-        " > ./ktra/ktra.toml
+        ' > ./ktra/ktra.toml
         cd ktra
         cargo build
         ./target/debug/ktra
