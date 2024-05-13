@@ -47,6 +47,14 @@ jobs:
         cargo run &
         cd ..
 
+    # Wait for Ktra to start
+    - name: Wait for Ktra to start
+      run: |
+        until $(curl --output /dev/null --silent --head --fail http://localhost:8000); do
+          printf '.'
+          sleep 5
+        done
+
     # Create new user for Ktra
     - name: Create user for Ktra and login
       run: |
