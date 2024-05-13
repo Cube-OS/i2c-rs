@@ -57,6 +57,10 @@ jobs:
         https_password = '${{ secrets.GITHUB_TOKEN }}'
         branch = 'main'
         token_path = './github_token.txt'
+
+        [server_config]
+        address = [127, 0, 0, 1]
+        port = 8000
         " > ./ktra/ktra.toml
         cd ktra
         cargo build
