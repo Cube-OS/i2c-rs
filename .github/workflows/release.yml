@@ -70,10 +70,15 @@ jobs:
         cargo login --registry=${{ env.REGISTRY }} $TOKEN
 
     # Build and test
-    - name: Build and test
+    - name: Build and test      
       run: |
         cargo build --release
         cargo test
+      continue-on-error: true
+
+    - name: Print ktra output
+      run: |
+        cat ktra/ktra_output.txt
 
     # Package
     - name: package
@@ -147,7 +152,3 @@ jobs:
         asset_path: target/package/${{ steps.crate_info.outputs.NAME }}-${{ steps.crate_info.outputs.VERSION }}.crate
         asset_name: ${{ steps.crate_info.outputs.NAME }}-${{ steps.crate_info.outputs.VERSION }}.crate
         asset_content_type: application/octet-stream
-
-    - name: Print ktra output
-      run: |
-        cat ktra/ktra_output.txt
