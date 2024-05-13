@@ -11,14 +11,14 @@ jobs:
 
     steps:
     - name: Setup Rust
-      uses: actions-rs/toolchain@v1
+      uses: actions-rs/toolchain@v2
       with:
         toolchain: stable
         override: true   
 
     # Checkout Code
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     # Get registry name and repo link
     - name: Get registry and repo
@@ -31,7 +31,7 @@ jobs:
 
     # Checkout Registry
     - name: Checkout Registry
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ env.REPO }}
@@ -39,7 +39,7 @@ jobs:
 
     # Checkout Ktra
     - name: Checkout Ktra
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: patrickoppel/ktra
@@ -60,9 +60,6 @@ jobs:
         " > ./ktra/ktra.toml
         cd ktra
         cargo build
-        
-    - name: Run ktra
-      run: |
         ./target/debug/ktra > ktra_output.txt 2>&1 &
         cd ..
 
@@ -92,12 +89,12 @@ jobs:
     - name: Get crate info
       id: crate_info
       run: |
-        echo "::set-output name=VERSION::$(cargo read-manifest | jq -r .version)"
-        echo "::set-output name=NAME::$(cargo read-manifest | jq -r .name)"
+        echo "{VERSION}=$(cargo read-manifest | jq -r .version)" >> $GITHUB_OUTPUT
+        echo "{NAME}=$(cargo read-manifest | jq -r .name)" >> $GITHUB_OUTPUT
 
     # Upload package
     - name: Upload package
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.crate_info.outputs.NAME }}-${{ steps.crate_info.outputs.VERSION }}
         path: target/package/*.crate
@@ -115,9 +112,9 @@ jobs:
         TAG_NAME="v${{ steps.get_version.outputs.VERSION }}"
         HTTP_STATUS=$(curl --silent --head --location "https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG_NAME" | grep HTTP | cut -d ' ' -f2)
         if [ "$HTTP_STATUS" == "200" ]; then
-          echo "::set-output name=EXISTS::true"
+          echo "{EXISTS}={true}" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=EXISTS::false"
+          echo "{EXISTS}={false}" >> $GITHUB_OUTPUT
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
