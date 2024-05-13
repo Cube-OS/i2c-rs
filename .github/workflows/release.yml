@@ -67,7 +67,7 @@ jobs:
         sleep 5
         TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d '{"password":"PASSWORD"}' http://localhost:8000/ktra/api/v1/new_user/ALICE)
         echo ${{ env.REGISTRY }}
-        cargo login --registry=${{ env.REGISTRY }} $TOKEN
+        cargo login --registry=${{ env.REGISTRY }} "$TOKEN"
         cargo build --release
         cargo test
       continue-on-error: true
