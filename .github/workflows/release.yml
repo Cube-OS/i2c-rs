@@ -63,7 +63,7 @@ jobs:
         port = 8000
         " > ./ktra/ktra.toml
         cd ktra
-        cargo build --release
+        cargo build
         
     - name: Run ktra
       run: |
