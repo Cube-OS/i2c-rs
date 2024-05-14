@@ -39,6 +39,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ env.REPO }}
+        ref: main
         path: registry       
 
     # Checkout Ktra
@@ -47,6 +48,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: patrickoppel/ktra
+        ref: main
         path: ktra
 
     # Run Ktra
