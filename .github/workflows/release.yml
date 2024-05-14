@@ -39,12 +39,10 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ env.REPO }}
-        ref: main
+        # ref: main
+        ref: ${{ github.event.pull_request.head.sha }}
         path: registry
-        fetch-depth: 0
-    - run: |
-        cd registry
-        git checkout HEAD
+        fetch-depth: 1
 
     # Checkout Ktra
     - name: Checkout Ktra
