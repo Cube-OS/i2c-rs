@@ -58,6 +58,7 @@ jobs:
         token_path = "./github_token.txt"
         ' > ./ktra/ktra.toml
         cd ktra
+        find "../registry/" -type d
         cargo build
         ./target/debug/ktra > ktra_output.txt 2>&1 &
         cd ..
