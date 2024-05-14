@@ -33,33 +33,36 @@ jobs:
         echo "REPO=$REPO" >> $GITHUB_ENV
         cd ..
 
-    # # Checkout Registry
-    # - name: Checkout Registry
-    #   uses: actions/checkout@v4
-    #   with:
-    #     token: ${{ secrets.GITHUB_TOKEN }}
-    #     repository: ${{ env.REPO }}
-    #     ref: main
-    #     path: registry
-    #     fetch-depth: 0
+    # Checkout Registry
+    - name: Checkout Registry
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ env.REPO }}
+        ref: main
+        path: registry
+        fetch-depth: 0
+    - run: |
+        cd registry
+        git checkout HEAD
 
-    # # Checkout Ktra
-    # - name: Checkout Ktra
-    #   uses: actions/checkout@v4
-    #   with:
-    #     token: ${{ secrets.GITHUB_TOKEN }}
-    #     repository: patrickoppel/ktra
-    #     ref: main
-    #     path: ktra
+    # Checkout Ktra
+    - name: Checkout Ktra
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: patrickoppel/ktra
+        ref: main
+        path: ktra
 
-    # Use git clone instead of Checkout action
-    - name: Clone Registry
-      run: |
-        git clone https://github.com/${{ env.REPO }} registry
+    # # Use git clone instead of Checkout action
+    # - name: Clone Registry
+    #   run: |
+    #     git clone https://github.com/${{ env.REPO }} registry
 
-    - name: Clone Ktra
-      run: |
-        git clone https://github.com/patrickoppel/ktra ktra
+    # - name: Clone Ktra
+    #   run: |
+    #     git clone https://github.com/patrickoppel/ktra ktra
 
     # Run Ktra
     - name: Build Ktra
