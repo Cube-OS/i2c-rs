@@ -40,7 +40,14 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ env.REPO }}
         ref: main
-        path: registry       
+        path: registry
+
+    # Make sure to have latest commit
+    - name: Pull latest commit
+      run: |
+        cd registry
+        git pull
+        cd ..    
 
     # Checkout Ktra
     - name: Checkout Ktra
