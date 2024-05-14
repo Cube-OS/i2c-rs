@@ -41,13 +41,7 @@ jobs:
         repository: ${{ env.REPO }}
         ref: main
         path: registry
-
-    # Make sure to have latest commit
-    - name: Pull latest commit
-      run: |
-        cd registry
-        git pull
-        cd ..    
+        fetch-depth: 0
 
     # Checkout Ktra
     - name: Checkout Ktra
