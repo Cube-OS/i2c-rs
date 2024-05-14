@@ -34,7 +34,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ env.REPO }}
-        path: crates       
+        path: registry       
 
     # Checkout Ktra
     - name: Checkout Ktra
@@ -51,7 +51,7 @@ jobs:
         echo '
         [index_config]
         remote_url = "https://github.com/Cube-OS/crates.git"
-        local_path = "../crates"
+        local_path = "../registry"
         https_username = "x-access-token"
         https_password = "'${{ secrets.GITHUB_TOKEN }}'"
         branch = "main"
