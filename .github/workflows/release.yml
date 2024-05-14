@@ -18,23 +18,27 @@ jobs:
     # Checkout Code
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        path: ${{ github.event.repository.name }}
 
     # Get registry name and repo link
     - name: Get registry and repo
       run: |
+        cd ${{ github.event.repository.name }}
         REGISTRY=$(awk -F'=' '/\[registries\]/ {getline; print $1}' .cargo/config.toml | tr -d ' ')
         REPO=$(grep -oP 'index = \K.*' .cargo/config.toml | tr -d '"' | awk -F/ '{print $(NF-1)"/"$NF}' | sed 's/\.git.*//')
         echo $REGISTRY
         echo "REGISTRY=$REGISTRY" >> $GITHUB_ENV
         echo $REPO
+        echo "REPO=$REPO" >> $GITHUB_ENV
+        cd ..
 
     # Checkout Registry
     - name: Checkout Registry
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        # repository: ${{ env.REPO }}
-        repository: Cube-OS/crates
+        repository: ${{ env.REPO }}
         path: registry       
 
     # Checkout Ktra
