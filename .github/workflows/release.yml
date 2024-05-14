@@ -64,6 +64,7 @@ jobs:
         ' > ./ktra/ktra.toml
         cd ktra
         find "../registry/" -type d
+        cat "../registry/ha/l-/*"
         cargo build
         ./target/debug/ktra > ktra_output.txt 2>&1 &
         cd ..
@@ -85,7 +86,9 @@ jobs:
 
     # Package
     - name: package
-      run: cargo package
+      run: |
+        cd ${{ github.event.repository.name }}
+        cargo package
 
     # Get crate info
     - name: Get crate info
@@ -99,7 +102,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.crate_info.outputs.NAME }}-${{ steps.crate_info.outputs.VERSION }}
-        path: target/package/*.crate
+        path: ${{ github.event.repository.name }}/target/package/*.crate
     
     # - name: Get version
     #   id: get_version
