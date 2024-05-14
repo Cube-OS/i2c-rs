@@ -69,7 +69,7 @@ jobs:
         echo '
         [index_config]
         remote_url = "https://github.com/Cube-OS/crates.git"
-        local_path = "../registry"
+        local_path = "${{ github.workspace }}/registry"
         https_username = "x-access-token"
         https_password = "'${{ secrets.GITHUB_TOKEN }}'"
         branch = "main"
