@@ -35,8 +35,8 @@ jobs:
     - name: Print env variables
       run: |
         echo ${{ env.REPO }}
-        echo ${{ env.registry }}
-        
+        echo ${{ env.REGISTRY }}
+
     # Checkout Registry
     - name: Checkout Registry
       uses: actions/checkout@v4
@@ -68,9 +68,11 @@ jobs:
         branch = "main"
         token_path = "${{ github.workspace }}/ktra/github_token.txt"
         ' > ${{ github.workspace }}/ktra/ktra.toml
+        ls -la
         cd ktra
         cargo build > build_output.txt 2>&1 || echo "Build failed"
         ./target/debug/ktra > ktra_output.txt 2>&1 &
+        sleep 10
         cd ..    
 
     - name: Create user for ktra and login, then build and test
