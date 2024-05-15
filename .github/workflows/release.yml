@@ -67,6 +67,9 @@ jobs:
         ' > ./ktra/ktra.toml
         cd ktra
         cargo build
+
+    - name: Run Ktra
+      run: |
         ./target/debug/ktra &
         cd ..
 
