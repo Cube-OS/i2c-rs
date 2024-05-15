@@ -28,12 +28,15 @@ jobs:
         cd ${{ github.event.repository.name }}
         REGISTRY=$(awk -F'=' '/\[registries\]/ {getline; print $1}' .cargo/config.toml | tr -d ' ')
         REPO=$(grep -oP 'index = \K.*' .cargo/config.toml | tr -d '"' | awk -F/ '{print $(NF-1)"/"$NF}' | sed 's/\.git.*//')
-        echo "REGISTRY=$REGISTRY" >> $GITHUB_ENV
-        echo ${{ env.registry }}
-        echo "REPO=$REPO" >> $GITHUB_ENV
-        echo ${{ env.REPO }}
+        echo "REGISTRY=$REGISTRY" >> $GITHUB_ENV        
+        echo "REPO=$REPO" >> $GITHUB_ENV        
         cd ..
-
+    
+    - name: Print env variables
+      run: |
+        echo ${{ env.REPO }}
+        echo ${{ env.registry }}
+        
     # Checkout Registry
     - name: Checkout Registry
       uses: actions/checkout@v4
