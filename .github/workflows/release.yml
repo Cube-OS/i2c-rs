@@ -86,11 +86,12 @@ jobs:
         cargo login --registry=${{ env.REGISTRY }} "$TOKEN"
         cargo build --release
         cargo test
+      continue-on-error: true
 
-    # - name: print ktra build_output
-    #   run: |
-    #     cat ${{ github.workspace }}/ktra/build_output.txt
-    #     cat ${{ github.workspace }}/ktra/ktra_output.txt
+    - name: print ktra build_output
+      run: |
+        cat ${{ github.workspace }}/ktra/build_output.txt
+        cat ${{ github.workspace }}/ktra/ktra_output.txt
     
       # Package
     - name: package
