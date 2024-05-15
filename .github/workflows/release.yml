@@ -66,12 +66,12 @@ jobs:
         token_path = "${{ github.workspace }}/ktra/github_token.txt"
         ' > ${{ github.workspace }}/ktra/ktra.toml
         cd ktra
-        cargo build --release > build_output.txt 2>&1 || echo "Build failed"
+        cargo build > build_output.txt 2>&1 || echo "Build failed"
         find ${{ github.workspace }} -name ktra
 
     - name: Run Ktra
       run: |
-        ${{ github.workspace }}/ktra/target/release/ktra -c ${{ github.workspace }}/ktra/ktra.toml
+        ${{ github.workspace }}/ktra/target/debug/ktra -c ${{ github.workspace }}/ktra/ktra.toml
 
     - name: Create user for ktra and login, then build and test
       run: |        
