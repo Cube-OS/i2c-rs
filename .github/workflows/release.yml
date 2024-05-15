@@ -70,14 +70,9 @@ jobs:
         " > ${{ github.workspace }}/ktra/ktra.toml
         ls -la
         cd ktra
-        # cargo build > build_output.txt 2>&1 || echo "Build failed"
-        # ./target/debug/ktra > ./ktra_output.txt 2>&1 &
-        cargo run &
-        sleep 10
-        cd ..    
-
-    - name: Create user for ktra and login, then build and test
-      run: |        
+        cargo build > build_output.txt 2>&1 || echo "Build failed"
+        ./target/debug/ktra > ./ktra_output.txt 2>&1 &
+        cd ..        
         until curl --output /dev/null --silent --head --fail http://localhost:8000; do
           echo "Waiting for server to start..."
           sleep 5
