@@ -83,14 +83,14 @@ jobs:
         cargo test
       continue-on-error: true
 
-    # Package
+    - name: print ktra.output
+      run: cat ${{ github.workspace }}/ktra_output.txt
+    
+      # Package
     - name: package
       run: |
         cd ${{ github.event.repository.name }}
         cargo package
-
-    - name: print ktra.output
-      run: cat ${{ github.workspace }}/ktra_output.txt
 
     # Get crate info
     - name: Get crate info
