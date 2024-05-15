@@ -71,7 +71,7 @@ jobs:
         ls -la
         cd ktra
         cargo build > build_output.txt 2>&1 || echo "Build failed"
-        ./target/debug/ktra > ktra_output.txt 2>&1 &
+        ./target/debug/ktra > ./ktra_output.txt 2>&1 &
         sleep 10
         cd ..    
 
@@ -89,7 +89,7 @@ jobs:
     - name: print ktra build_output
       run: |
         cat ${{ github.workspace }}/ktra/build_output.txt
-        cat ${{ github.workspace }}/ktra_output.txt
+        cat ${{ github.workspace }}/ktra/ktra_output.txt
     
       # Package
     - name: package
