@@ -71,7 +71,7 @@ jobs:
         cd ktra
         cargo build --release > build_output.txt 2>&1 || echo "Build failed"
         ./target/release/ktra > ./ktra_output.txt 2>&1 &
-        cd ..        
+        cd ..   
         timeout=120
         while [ $timeout -gt 0 ]; do
           if curl --output /dev/null --silent --head --fail http://localhost:8000; then
@@ -87,7 +87,6 @@ jobs:
         cargo login --registry=${{ env.REGISTRY }} "$TOKEN"
         cargo build --release
         cargo test
-      continue-on-error: true
 
     # - name: print ktra build_output
     #   run: |
