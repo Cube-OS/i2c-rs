@@ -66,10 +66,7 @@ jobs:
         token_path = "${{ github.workspace }}/ktra/github_token.txt"
         ' > ${{ github.workspace }}/ktra/ktra.toml
         cd ktra
-        ls -la
-        cargo build --release
-        sleep 10
-        find ${{ github.workspace }}/ktra/*
+        cargo build --release > build_output.txt 2>&1
 
     - name: Run Ktra
       run: |
@@ -86,8 +83,8 @@ jobs:
         cargo test
       continue-on-error: true
 
-    # - name: print ktra.output
-    #   run: cat ${{ github.workspace }}/ktra_output.txt
+    - name: print ktra build_output
+      run: cat ${{ github.workspace }}/ktra/build_output.txt
     
       # Package
     - name: package
