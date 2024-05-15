@@ -67,11 +67,11 @@ jobs:
         ' > ./ktra/ktra.toml
         cd ktra
         cargo build
+        mv ${{ github.workspace }}/ktra/target/debug/ktra ${{ github.workspace }}/ktra/ktra
 
     - name: Run Ktra
       run: |
-        ./target/debug/ktra &
-        cd ..
+        ${{ github.workspace }}/ktra/ktra &
 
     - name: Create user for ktra and login, then build and test
       run: |        
