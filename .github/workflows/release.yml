@@ -67,7 +67,7 @@ jobs:
         ' > ${{ github.workspace }}/ktra/ktra.toml
         cd ktra
         cargo build --release
-        find "${{ github.workspace }}/ktra/*"
+        find ${{ github.workspace }}/ktra/*
 
     - name: Run Ktra
       run: |
