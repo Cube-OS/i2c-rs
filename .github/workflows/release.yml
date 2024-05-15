@@ -70,7 +70,6 @@ jobs:
         " > ${{ github.workspace }}/ktra/ktra.toml
         cd ktra
         cargo build > build_output.txt 2>&1 || echo "Build failed"
-        ls -la ./target/debug/
         ./target/debug/ktra > ./ktra_output.txt 2>&1 &
         cd ..        
         timeout=120
@@ -90,18 +89,16 @@ jobs:
         cargo test
       continue-on-error: true
 
-    - name: print ktra build_output
-      run: |
-        cat ${{ github.workspace }}/ktra/build_output.txt
-        cat ${{ github.workspace }}/ktra/ktra_output.txt
+    # - name: print ktra build_output
+    #   run: |
+    #     cat ${{ github.workspace }}/ktra/build_output.txt
+    #     cat ${{ github.workspace }}/ktra/ktra_output.txt
     
       # Package
     - name: package
       run: |
         cd ${{ github.event.repository.name }}
         cargo package
-
-    
 
     # Get crate info
     - name: Get crate info
