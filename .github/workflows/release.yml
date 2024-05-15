@@ -71,7 +71,7 @@ jobs:
 
     - name: Run Ktra
       run: |
-        ${{ github.workspace }}/ktra/ktra &
+        ${{ github.workspace }}/ktra/ktra -c ${{ github.workspace }}/ktra/ktra.toml &
 
     - name: Create user for ktra and login, then build and test
       run: |        
