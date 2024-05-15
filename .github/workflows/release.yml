@@ -28,10 +28,10 @@ jobs:
         cd ${{ github.event.repository.name }}
         REGISTRY=$(awk -F'=' '/\[registries\]/ {getline; print $1}' .cargo/config.toml | tr -d ' ')
         REPO=$(grep -oP 'index = \K.*' .cargo/config.toml | tr -d '"' | awk -F/ '{print $(NF-1)"/"$NF}' | sed 's/\.git.*//')
-        echo $REGISTRY
         echo "REGISTRY=$REGISTRY" >> $GITHUB_ENV
-        echo $REPO
+        echo ${{ env.registry }}
         echo "REPO=$REPO" >> $GITHUB_ENV
+        echo ${{ env.REPO }}
         cd ..
 
     # Checkout Registry
@@ -67,11 +67,8 @@ jobs:
         ' > ${{ github.workspace }}/ktra/ktra.toml
         cd ktra
         cargo build > build_output.txt 2>&1 || echo "Build failed"
-        find ${{ github.workspace }} -name ktra
-
-    - name: Run Ktra
-      run: |
-        ${{ github.workspace }}/ktra/target/debug/ktra -c ${{ github.workspace }}/ktra/ktra.toml
+        ./target/debug/ktra > ktra_output.txt 2>&1 &
+        cd ..    
 
     - name: Create user for ktra and login, then build and test
       run: |        
