@@ -68,9 +68,9 @@ jobs:
         branch = 'main'
         token_path = '${{ github.workspace }}/ktra/github_token.txt'
         " > ${{ github.workspace }}/ktra/ktra.toml
-        ls -la
         cd ktra
         cargo build > build_output.txt 2>&1 || echo "Build failed"
+        ls -la ./target/debug/
         ./target/debug/ktra > ./ktra_output.txt 2>&1 &
         cd ..        
         until curl --output /dev/null --silent --head --fail http://localhost:8000; do
