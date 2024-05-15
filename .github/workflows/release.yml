@@ -64,14 +64,13 @@ jobs:
         https_password = "'${{ secrets.GITHUB_TOKEN }}'"
         branch = "main"
         token_path = "${{ github.workspace }}/ktra/github_token.txt"
-        ' > ./ktra/ktra.toml
+        ' > ${{ github.workspace }}/ktra/ktra.toml
         cd ktra
-        cargo build
-        mv ${{ github.workspace }}/ktra/target/debug/ktra ${{ github.workspace }}/ktra/ktra
+        cargo build --release
 
     - name: Run Ktra
       run: |
-        ${{ github.workspace }}/ktra/ktra -c ${{ github.workspace }}/ktra/ktra.toml &
+        ${{ github.workspace }}/ktra/target/release/ktra -c ${{ github.workspace }}/ktra/ktra.toml > ${{ github.workspace }}/ktra_output.txt 2>&1 &
 
     - name: Create user for ktra and login, then build and test
       run: |        
@@ -89,6 +88,9 @@ jobs:
       run: |
         cd ${{ github.event.repository.name }}
         cargo package
+
+    - name: print ktra.output
+      run: cat ${{ github.workspace }}/ktra_output.txt
 
     # Get crate info
     - name: Get crate info
