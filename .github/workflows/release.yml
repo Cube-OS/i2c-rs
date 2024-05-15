@@ -7,7 +7,8 @@ on:
 
 jobs:
   release:
-    runs-on: ubuntu-20.04
+    # runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Setup Rust
@@ -40,9 +41,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ env.REPO }}
         ref: main
-        # ref: ${{ github.event.pull_request.head.sha }}
         path: registry
-        # fetch-depth: 1
 
     # Checkout Ktra
     - name: Checkout Ktra
@@ -52,15 +51,6 @@ jobs:
         repository: patrickoppel/ktra
         ref: main
         path: ktra
-
-    # # Use git clone instead of Checkout action
-    # - name: Clone Registry
-    #   run: |
-    #     git clone https://github.com/${{ env.REPO }} registry
-
-    # - name: Clone Ktra
-    #   run: |
-    #     git clone https://github.com/patrickoppel/ktra ktra
 
     # Run Ktra
     - name: Build Ktra
@@ -76,10 +66,8 @@ jobs:
         token_path = "./github_token.txt"
         ' > ./ktra/ktra.toml
         cd ktra
-        find "../registry/" -type d
-        cat ../registry/ha/l-/*
         cargo build
-        ./target/debug/ktra > ktra_output.txt 2>&1 &
+        ./target/debug/ktra &
         cd ..
 
     - name: Create user for ktra and login, then build and test
@@ -92,10 +80,6 @@ jobs:
         cargo build --release
         cargo test
       continue-on-error: true
-
-    - name: Print ktra output
-      run: |
-        cat ktra/ktra_output.txt
 
     # Package
     - name: package
@@ -127,7 +111,7 @@ jobs:
     - name: Check if tag exists
       id: check_tag
       run: |
-        TAG_NAME="v${{ steps.get_version.outputs.VERSION }}"
+        TAG_NAME="v${{ steps.crate_info.outputs.VERSION }}"
         HTTP_STATUS=$(curl --silent --head --location "https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG_NAME" | grep HTTP | cut -d ' ' -f2)
         if [ "$HTTP_STATUS" == "200" ]; then
           echo "{EXISTS}={true}" >> $GITHUB_OUTPUT
@@ -141,7 +125,7 @@ jobs:
     - name: Create and push tag
       if: steps.check_tag.outputs.EXISTS == 'false'
       run: |
-        TAG_NAME="v${{ steps.get_version.outputs.VERSION }}"
+        TAG_NAME="v${{ steps.crate_info.outputs.VERSION }}"
         echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
         git tag $TAG_NAME
         git push origin ${{ env.TAG_NAME }}
@@ -154,8 +138,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.get_version.outputs.VERSION }}
-        release_name: Release ${{ steps.get_version.outputs.VERSION }}
+        tag_name: ${{ steps.crate_info.outputs.VERSION }}
+        release_name: Release ${{ steps.crate_info.outputs.VERSION }}
         draft: false
         prerelease: false
 
