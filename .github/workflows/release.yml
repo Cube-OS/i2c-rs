@@ -69,8 +69,8 @@ jobs:
         token_path = '${{ github.workspace }}/ktra/github_token.txt'
         " > ${{ github.workspace }}/ktra/ktra.toml
         cd ktra
-        cargo build > build_output.txt 2>&1 || echo "Build failed"
-        ./target/debug/ktra > ./ktra_output.txt 2>&1 &
+        cargo build --release > build_output.txt 2>&1 || echo "Build failed"
+        ./target/release/ktra > ./ktra_output.txt 2>&1 &
         cd ..        
         timeout=120
         while [ $timeout -gt 0 ]; do
