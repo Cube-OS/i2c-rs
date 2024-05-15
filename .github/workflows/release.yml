@@ -59,19 +59,20 @@ jobs:
     - name: Build Ktra
       run: |
         echo "${{ secrets.GITHUB_TOKEN }}" > ${{ github.workspace }}/ktra/github_token.txt
-        echo '
+        echo "
         [index_config]
-        remote_url = "https://github.com/Cube-OS/crates.git"
-        local_path = "${{ github.workspace }}/registry"
-        https_username = "x-access-token"
-        https_password = "'${{ secrets.GITHUB_TOKEN }}'"
-        branch = "main"
-        token_path = "${{ github.workspace }}/ktra/github_token.txt"
-        ' > ${{ github.workspace }}/ktra/ktra.toml
+        remote_url = 'https://github.com/Cube-OS/crates.git'
+        local_path = '${{ github.workspace }}/registry'
+        https_username = 'x-access-token'
+        https_password = '${{ secrets.GITHUB_TOKEN }}'
+        branch = 'main'
+        token_path = '${{ github.workspace }}/ktra/github_token.txt'
+        " > ${{ github.workspace }}/ktra/ktra.toml
         ls -la
         cd ktra
-        cargo build > build_output.txt 2>&1 || echo "Build failed"
-        ./target/debug/ktra > ./ktra_output.txt 2>&1 &
+        # cargo build > build_output.txt 2>&1 || echo "Build failed"
+        # ./target/debug/ktra > ./ktra_output.txt 2>&1 &
+        cargo run &
         sleep 10
         cd ..    
 
