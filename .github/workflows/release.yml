@@ -68,12 +68,11 @@ jobs:
         cd ktra
         cargo build --release
 
+  # - name: Create user for ktra and login, then build and test
+    #   run: |
     - name: Run Ktra
       run: |
-        ${{ github.workspace }}/ktra/target/release/ktra -c ${{ github.workspace }}/ktra/ktra.toml > ${{ github.workspace }}/ktra_output.txt 2>&1 &
-
-    - name: Create user for ktra and login, then build and test
-      run: |        
+        ${{ github.workspace }}/ktra/target/release/ktra -c ${{ github.workspace }}/ktra/ktra.toml > ${{ github.workspace }}/ktra_output.txt 2>&1 &        
         sleep 5
         cd ${{ github.event.repository.name }}
         TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d '{"password":"PASSWORD"}' http://localhost:8000/ktra/api/v1/new_user/ALICE)
@@ -81,16 +80,17 @@ jobs:
         cargo login --registry=${{ env.REGISTRY }} "$TOKEN"
         cargo build --release
         cargo test
+        cargo package
       continue-on-error: true
 
     - name: print ktra.output
       run: cat ${{ github.workspace }}/ktra_output.txt
     
-      # Package
-    - name: package
-      run: |
-        cd ${{ github.event.repository.name }}
-        cargo package
+    #   # Package
+    # - name: package
+    #   run: |
+    #     cd ${{ github.event.repository.name }}
+    #     cargo package
 
     # Get crate info
     - name: Get crate info
