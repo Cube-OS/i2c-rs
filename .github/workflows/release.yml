@@ -75,6 +75,7 @@ jobs:
     - name: Create user for ktra and login, then build and test
       run: |        
         sleep 5
+        curl localhost:8000
         cd ${{ github.event.repository.name }}
         TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d '{"password":"PASSWORD"}' http://localhost:8000/ktra/api/v1/new_user/ALICE | jq -r '.token')
         echo ${{ env.REGISTRY }}
