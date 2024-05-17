@@ -23,6 +23,6 @@ jobs:
 
     # Run ktra action
     - name: Run ktra
-      uses: patrickoppel/ktra/.github/actions@main
+      uses: patrickoppel/ktra/.github/actions@develop
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
