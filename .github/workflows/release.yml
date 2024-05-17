@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - main # Trigger workflow on push to the main branch
+      - main # Trigger workflow on push to main branch
 
 jobs:
   release:
