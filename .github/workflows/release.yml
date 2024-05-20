@@ -2,10 +2,8 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*' # Trigger workflow on push to tags that start with 'v'
-    # branches:
-    #   - main # Trigger workflow on push to the main branch
+    branches:
+      - main # Trigger workflow on push to the main branch
 
 jobs:
   release:
